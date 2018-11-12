@@ -1,3 +1,5 @@
+const Sequelize = require ('sequelize');
+
 const db = new Sequelize('postgres://localhost:5432/plantr');
 module.exports = db;
 
@@ -18,9 +20,6 @@ const Plot = db.define('plot', {
   },
   shaded: {
     type: Sequelize.BOOLEAN
-  },
-  VegArray: {
-    type: Sequelize.ARRAY(Sequelize.TEXT)
   }
 })
 
@@ -33,24 +32,19 @@ const Vegetable = db.define('vegetable', {
     type: Sequelize.STRING
   },
   planted_on: {
-    date: Sequelize.DATE
-  },
-  plotArray: {
-    type: Sequelize.ARRAY(Sequelize.TEXT)
+    type: Sequelize.DATE
   }
 })
 
 const plotVegetables = db.define('plotVegetables', {
-  Vege: {
-    ''
-  }
+
 })
 
 
 Plot.belongsTo(Gardener)
 Gardener.hasOne(Plot)
 
-Gardener.belongsTo(Vegetable, {foreignKey: name})
+Gardener.belongsTo(Vegetable, { as: 'favorite_vegetable' })
 
 Plot.belongsToMany(Vegetable, { through: 'plotVegetables' })
 Vegetable.belongsToMany(Plot, { through: 'plotVegetables' })
