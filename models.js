@@ -18,6 +18,9 @@ const Plot = db.define('plot', {
   },
   shaded: {
     type: Sequelize.BOOLEAN
+  },
+  VegArray: {
+    type: Sequelize.ARRAY(Sequelize.TEXT)
   }
 })
 
@@ -31,16 +34,25 @@ const Vegetable = db.define('vegetable', {
   },
   planted_on: {
     date: Sequelize.DATE
+  },
+  plotArray: {
+    type: Sequelize.ARRAY(Sequelize.TEXT)
   }
 })
 
 const plotVegetables = db.define('plotVegetables', {
-  foreignKey: {
+  Vege: {
     ''
   }
 })
 
-Plot.belongsToMany(Vegetable, { foreignKey: '' })
-Vegetable.belongsToMany(Plot, { foreignKey: '' })
+
+Plot.belongsTo(Gardener)
+Gardener.hasOne(Plot)
+
+Gardener.belongsTo(Vegetable, {foreignKey: name})
+
+Plot.belongsToMany(Vegetable, { through: 'plotVegetables' })
+Vegetable.belongsToMany(Plot, { through: 'plotVegetables' })
 
 
